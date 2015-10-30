@@ -1,0 +1,27 @@
+{
+  "lex": {
+    "rules": [
+      ["\\s+",          "/* skip whitespace */"],
+      ["\\(",           "return 'GAME_TREE_START'"],
+      ["\\)",           "return 'GAME_TREE_END'"],
+      [";",             "return 'NODE_START'"],
+      ["[A-Z]{1,2}",    "return 'PROP_IDENT'"],
+      ["\\[[+-]?\\d+\\]",   "return 'PROP_NUMBER'"],
+      ["\\[.+?\\]",           "return 'PROP_TEXT'"],
+      ["$",             "return 'EOF';"]
+    ]
+  },
+  "bnf": {
+    "file": [ ["game_tree EOF", "return $1"] ],
+    "game_tree_list": [ [ "game_tree", "$$ = [$1]"], [ "game_tree game_tree_list", "$$ = [$1].concat($2)" ] ],
+    "game_tree": [ ["GAME_TREE_START sequence GAME_TREE_END", "$$ = $2"],
+                   ["GAME_TREE_START sequence game_tree_list GAME_TREE_END", "$$ = $2.concat([$3])" ] ],
+    "sequence": [ ["node", "$$ = [$1]"], ["node sequence", "$$ = [$1].concat($2)"] ],
+    "node": [ ["NODE_START property_list", "$$ = $2"] ],
+    "property_list": [["property", "$$ = {}; $$[$1.ident] = $1.value"],
+                      ["property_list property", "$$[$2.ident] = $2.value"]],
+    "property": [ ["PROP_IDENT prop_value", "$$ = {ident: $1, value: $2}"]],
+    "prop_value": [ [ "PROP_NUMBER", "$$ = parseInt($1.substring(1, $1.length - 1))"],
+                    [ "PROP_TEXT", "$$ = $1.substring(1, $1.length - 1)"]]
+  }
+}
