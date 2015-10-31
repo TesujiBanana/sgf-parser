@@ -1,10 +1,13 @@
 "use strict";
 
 import parser from "../src/parser";
+
+import _ from "underscore";
 import { inspect } from "util";
 
 let simpleSGF = require("../sgf/simple.sgf");
 let variationSGF = require("../sgf/variation.sgf");
+let problemSGF = require("../sgf/problem.sgf");
 
 describe('parser', () => {
   describe('parse', () => {
@@ -36,27 +39,15 @@ describe('parser', () => {
       expect(() => parser.parse(variationSGF)).to.not.throw();
     });
 
-    it('has a pointer to the main branch', () => {
-      let root = parser.parse(variationSGF);
-      let mainline = root._next._next._next;
-      expect(mainline.B).to.equal("cc");
-      expect(mainline.N).to.equal("Var A");
-    });
-
-    it('main branch has a pointer to parent', () => {
-      let root = parser.parse(variationSGF);
-      let main = root._next._next;
-      let main_branch = main._next;
-      expect(main_branch._parent).to.eql(main);
-    });
-
     it('has a pointer to variations', () => {
       let root = parser.parse(variationSGF);
       let variations = root._next._next._variations;
-      expect(variations[0].B).to.equal("hh");
-      expect(variations[0].N).to.equal("Var B");
-      expect(variations[1].B).to.equal("gg");
-      expect(variations[1].N).to.equal("Var C");
+      expect(variations[0].B).to.equal("cc");
+      expect(variations[0].N).to.equal("Var A");
+      expect(variations[1].B).to.equal("hh");
+      expect(variations[1].N).to.equal("Var B");
+      expect(variations[2].B).to.equal("gg");
+      expect(variations[2].N).to.equal("Var C");
     });
 
     it('variations have pointers to parent', () => {
@@ -65,6 +56,19 @@ describe('parser', () => {
       let variations = main._variations;
       expect(variations[0]._parent).to.eql(main);
       expect(variations[1]._parent).to.eql(main);
-    })
+      expect(variations[2]._parent).to.eql(main);
+    });
+
+    it('nodes can have no (zero) properties', () => {
+      let root = parser.parse(problemSGF);
+      let emptyNode = _.omit(root._next, "_parent", "_next", "_variations");
+      expect(emptyNode).to.eql({});
+    });
+
+    it('properties can have multiple values', () => {
+      let root = parser.parse(problemSGF);
+      expect(root.AB).to.eql(["ob", "nc", "pc", "qc", "qe", "re"]);
+      expect(root.AW).to.eql(["pb", "qb", "rb", "rc", "rd"]);
+    });
   });
 });

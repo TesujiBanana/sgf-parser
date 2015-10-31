@@ -25,6 +25,7 @@
     "jest-cli": "^0.6.1",
     "jison": "git://github.com/zaach/jison.git",
     "jison-lex": "^0.3.4",
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "underscore": "^1.8.3"
   }
 }

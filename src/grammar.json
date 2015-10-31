@@ -13,17 +13,22 @@
   },
   "bnf": {
     "file": [ ["game_tree EOF", "return $1"] ],
-    "game_tree": [ ["GAME_TREE_START sequence GAME_TREE_END", "$$ = $2"] ],
-    "game_tree_list": [ ["game_tree", "$$ = [$1]"],
-                        ["game_tree_list game_tree", "$$ = $1.concat($2)"] ],
-    "sequence": [ ["node", "$$ = [$1]"],
-                  ["node sequence", "$$ = $1; $1._next = $2; $2._parent = $1;"],
-                  ["node game_tree_list", "$$ = $1; $1._next = $2[0]; $1._variations = $2.slice(1); $2.forEach(function(n) { n._parent = $1 });"] ],
-    "node": [ ["NODE_START property_list", "$$ = $2"] ],
-    "property_list": [["property", "$$ = {}; $$[$1.ident] = $1.value"],
-                      ["property_list property", "$$[$2.ident] = $2.value"]],
-    "property": [ ["PROP_IDENT prop_value", "$$ = {ident: $1, value: $2}"]],
+    "game_tree": [ ["GAME_TREE_START game_tree_contents GAME_TREE_END", "$$ = $2"] ],
+    "game_tree_contents": [ ["sequence", "$$ = $1"] ],
+    "sequence": [ ["node", "$$ = $1"],
+                  ["branch_node", "$$ = $1"],
+                  ["node sequence", "$$ = $1; $1._next = $2; $2._parent = $1;"]],
+    "branch_node": [ ["node game_tree", "$$ = $1; $1._variations = [$2]; $2._parent = $1"],
+                     ["branch_node game_tree", "$$ = $1; $1._variations.push($2); $2._parent = $1"] ],
+    "node": [ ["NODE_START", "$$ = {}"],
+              ["NODE_START property_list", "$$ = $2"] ],
+    "property_list": [ ["property", "$$ = {}; $$[$1.ident] = $1.value"],
+                       ["property_list property", "$$[$2.ident] = $2.value"] ],
+    "property": [ ["PROP_IDENT prop_value", "$$ = {ident: $1, value: $2}"],
+                  ["PROP_IDENT prop_value_list", "$$ = {ident: $1, value: $2}"] ],
+    "prop_value_list": [ [ "prop_value prop_value", "$$ = [$1, $2]"],
+                         [ "prop_value_list prop_value", "$$ = $1.concat($2)"] ],
     "prop_value": [ [ "PROP_NUMBER", "$$ = parseInt($1.substring(1, $1.length - 1))"],
-                    [ "PROP_TEXT", "$$ = $1.substring(1, $1.length - 1)"]]
+                    [ "PROP_TEXT", "$$ = $1.substring(1, $1.length - 1)"] ]
   }
 }
