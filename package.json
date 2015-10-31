@@ -2,9 +2,10 @@
   "name": "sgf-parser",
   "version": "0.0.1",
   "description": "SGF Parser in Javascript",
-  "main": "index.js",
+  "main": "lib/parser.js",
   "scripts": {
-    "test": "mocha --compilers js:babel/register"
+    "test": "mocha --compilers js:babel/register",
+    "build": "node --require babel/register src/generate.js"
   },
   "repository": {
     "type": "git",
@@ -25,9 +26,5 @@
     "jison": "git://github.com/zaach/jison.git",
     "jison-lex": "^0.3.4",
     "mocha": "^2.3.3"
-  },
-  "dependencies": {
-    "jison": "git://github.com/zaach/jison.git",
-    "sgf": "git+https://github.com/curious-attempt-bunny/node-sgf.git"
   }
 }
