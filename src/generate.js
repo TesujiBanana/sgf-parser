@@ -4,6 +4,6 @@ import parser from "./parser";
 import { writeFileSync } from "fs";
 
 let location = "lib/parser.js";
-let contents = parser.generate();
+let contents = parser.generate({moduleMain: function() {}});
 
 writeFileSync(location, contents);
