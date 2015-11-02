@@ -8,6 +8,7 @@ import { inspect } from "util";
 let simpleSGF = require("../sgf/simple.sgf");
 let variationSGF = require("../sgf/variation.sgf");
 let problemSGF = require("../sgf/problem.sgf");
+let commentSGF = require("../sgf/comment.sgf");
 
 describe('parser', () => {
   describe('parse', () => {
@@ -69,6 +70,13 @@ describe('parser', () => {
       let root = parser.parse(problemSGF);
       expect(root.AB).to.eql(["ob", "nc", "pc", "qc", "qe", "re"]);
       expect(root.AW).to.eql(["pb", "qb", "rb", "rc", "rd"]);
+    });
+
+    it('comments can be multiples lines', () => {
+      let root = parser.parse(commentSGF);
+      expect(root.C).to.match(/multi-/);
+      expect(root.C).to.match(/line/);
+      expect(root.C).to.match(/comment!!!/);
     });
   });
 });

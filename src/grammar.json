@@ -1,14 +1,14 @@
 {
   "lex": {
     "rules": [
-      ["\\s+",            "/* skip whitespace */"],
-      ["\\(",             "return 'GAME_TREE_START'"],
-      ["\\)",             "return 'GAME_TREE_END'"],
-      [";",               "return 'NODE_START'"],
-      ["[A-Z]{1,2}",      "return 'PROP_IDENT'"],
-      ["\\[[+-]?\\d+\\]", "return 'PROP_NUMBER'"],
-      ["\\[.+?\\]",       "return 'PROP_TEXT'"],
-      ["$",               "return 'EOF';"]
+      ["\\s+",                          "/* skip whitespace */"],
+      ["\\(",                           "return 'GAME_TREE_START'"],
+      ["\\)",                           "return 'GAME_TREE_END'"],
+      [";",                             "return 'NODE_START'"],
+      ["[A-Z]{1,2}",                    "return 'PROP_IDENT'"],
+      ["\\[[+-]?\\d+\\]",               "return 'PROP_NUMBER'"],
+      ["\\[(?:\\\\.|[^\\\\\\]])*?\\]",  "return 'PROP_TEXT';"],
+      ["$",                             "return 'EOF';"]
     ]
   },
   "bnf": {
