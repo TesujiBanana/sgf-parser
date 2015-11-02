@@ -1,9 +1,9 @@
 "use strict";
 
-import parser from "./parser";
-import { writeFileSync } from "fs";
+var parser = require("./parser");
+var fs = require("fs");
 
-let location = "lib/parser.js";
-let contents = parser.generate({moduleMain: function() {}});
+var location = "lib/parser.js";
+var contents = parser.generate({moduleMain: function() {}});
 
-writeFileSync(location, contents);
+fs.writeFileSync(location, contents);

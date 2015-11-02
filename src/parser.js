@@ -1,6 +1,6 @@
 "use strict";
 
-import { Parser } from "jison";
-import grammar from "./grammar.json";
+var Parser = require("jison").Parser;
+var grammar = require("./grammar.json");
 
-export default new Parser(grammar);
+module.exports = new Parser(grammar);

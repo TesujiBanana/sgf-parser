@@ -1,14 +1,13 @@
 "use strict";
 
-import parser from "../src/parser";
+var parser = require("../src/parser");
 
-import _ from "underscore";
-import { inspect } from "util";
+var _ = require("underscore");
 
-let simpleSGF = require("../sgf/simple.sgf");
-let variationSGF = require("../sgf/variation.sgf");
-let problemSGF = require("../sgf/problem.sgf");
-let commentSGF = require("../sgf/comment.sgf");
+var simpleSGF = require("../sgf/simple.sgf");
+var variationSGF = require("../sgf/variation.sgf");
+var problemSGF = require("../sgf/problem.sgf");
+var commentSGF = require("../sgf/comment.sgf");
 
 describe('parser', () => {
   describe('parse', () => {
@@ -17,7 +16,7 @@ describe('parser', () => {
     });
 
     it('returns the root node', () => {
-      let root = parser.parse(simpleSGF);
+      var root = parser.parse(simpleSGF);
       expect(root.FF).to.equal(4);
       expect(root.GM).to.equal(1);
       expect(root.SZ).to.equal(19);
@@ -25,14 +24,14 @@ describe('parser', () => {
     });
 
     it('root node has pointer to next', () => {
-      let root = parser.parse(simpleSGF);
-      let child = root._next;
+      var root = parser.parse(simpleSGF);
+      var child = root._next;
       expect(child.B).to.equal("aa");
     });
 
     it('child node has pointer to parent', () => {
-      let root = parser.parse(simpleSGF);
-      let child = root._next;
+      var root = parser.parse(simpleSGF);
+      var child = root._next;
       expect(child._parent).to.eql(root);
     });
 
@@ -41,8 +40,8 @@ describe('parser', () => {
     });
 
     it('has a pointer to variations', () => {
-      let root = parser.parse(variationSGF);
-      let variations = root._next._next._variations;
+      var root = parser.parse(variationSGF);
+      var variations = root._next._next._variations;
       expect(variations[0].B).to.equal("cc");
       expect(variations[0].N).to.equal("Var A");
       expect(variations[1].B).to.equal("hh");
@@ -52,28 +51,28 @@ describe('parser', () => {
     });
 
     it('variations have pointers to parent', () => {
-      let root = parser.parse(variationSGF);
-      let main = root._next._next;
-      let variations = main._variations;
+      var root = parser.parse(variationSGF);
+      var main = root._next._next;
+      var variations = main._variations;
       expect(variations[0]._parent).to.eql(main);
       expect(variations[1]._parent).to.eql(main);
       expect(variations[2]._parent).to.eql(main);
     });
 
     it('nodes can have no (zero) properties', () => {
-      let root = parser.parse(problemSGF);
-      let emptyNode = _.omit(root._next, "_parent", "_next", "_variations");
+      var root = parser.parse(problemSGF);
+      var emptyNode = _.omit(root._next, "_parent", "_next", "_variations");
       expect(emptyNode).to.eql({});
     });
 
     it('properties can have multiple values', () => {
-      let root = parser.parse(problemSGF);
+      var root = parser.parse(problemSGF);
       expect(root.AB).to.eql(["ob", "nc", "pc", "qc", "qe", "re"]);
       expect(root.AW).to.eql(["pb", "qb", "rb", "rc", "rd"]);
     });
 
     it('comments can be multiples lines', () => {
-      let root = parser.parse(commentSGF);
+      var root = parser.parse(commentSGF);
       expect(root.C).to.match(/multi-/);
       expect(root.C).to.match(/line/);
       expect(root.C).to.match(/comment!!!/);
