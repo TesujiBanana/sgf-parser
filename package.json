@@ -1,11 +1,12 @@
 {
   "name": "sgf-parser",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "SGF Parser in Javascript",
   "main": "lib/parser.js",
   "scripts": {
     "test": "mocha",
-    "build": "node src/generate.js"
+    "build": "node src/generate.js",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
