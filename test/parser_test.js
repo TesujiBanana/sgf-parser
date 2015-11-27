@@ -52,7 +52,7 @@ describe('parser', () => {
 
     it('has a pointer to variations', () => {
       var root = parser.parse(variationSGF)[0];
-      var variations = root._next._next._variations;
+      var variations = root._next._next._next;
       expect(variations[0].B).to.equal("cc");
       expect(variations[0].N).to.equal("Var A");
       expect(variations[1].B).to.equal("hh");
@@ -64,7 +64,7 @@ describe('parser', () => {
     it('variations have pointers to parent', () => {
       var root = parser.parse(variationSGF)[0];
       var main = root._next._next;
-      var variations = main._variations;
+      var variations = main._next;
       expect(variations[0]._parent).to.eql(main);
       expect(variations[1]._parent).to.eql(main);
       expect(variations[2]._parent).to.eql(main);

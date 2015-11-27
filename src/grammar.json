@@ -14,7 +14,7 @@
   "bnf": {
     "file": [ ["game_tree EOF", "return $1"] ],
     "game_tree": [ ["GAME_TREE_START sequence GAME_TREE_END", "$$ = $2"],
-                   ["GAME_TREE_START sequence game_tree_list GAME_TREE_END", "$$ = $2.concat($3); $p = $2[$2.length - 1]; $p._variations = $3.map(function($n) { $n[0]._parent = $p; return $n[0]})"] ],
+                   ["GAME_TREE_START sequence game_tree_list GAME_TREE_END", "$$ = $2.concat($3); $p = $2[$2.length - 1]; $p._next = $3.map(function($n) { $n[0]._parent = $p; return $n[0]})"] ],
     "game_tree_list": [ ["game_tree", "$$ = [$1]"],
                         ["game_tree_list game_tree", "$$ = $1; $$.push($2)"] ],
     "sequence": [ ["node", "$$ = [$1]"],
